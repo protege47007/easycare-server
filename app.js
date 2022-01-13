@@ -10,31 +10,10 @@ const mailer = require('nodemailer');
 const session = require("express-session")
 const passport = require("passport");
 const pLMongoose = require("passport-local-mongoose");
+const GoogleStrategy = require('passport-google-oauth20').Strategy;
+const findOrCreate = require('mongoose-findorcreate');
 
-const transporter = mailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: 'youremail@gmail.com',
-    pass: 'yourpassword'
-  }
-});
 
-let mailOptions= {
-  from: 'youremail@gmail.com',
-  to: 'myFriend@gmail.com', // multiple reciepients 'a@mail.com, b@gamil.com '
-  subject: 'Sending Email using Node.js',
-  text: 'this was some what easy!.. ;)' // or html: '<h1>welcome</h1><p>that was easy!</p>'
-};
-
-function sendMail(auth, options){
-  auth.sendMail(options, function(error, info){
-    if (error) {
-      console.error(error, 'line 30: mail sender function');
-    } else {
-      console.log('Email sent ', info.response);
-    }
-  })
-}
 
 //`mongodb+srv://protege47007:${process.env.PASS}@cluster0.5nisq.mongodb.net/easycareDb`
 // CLOUDINARY_URL=`cloudinary://${process.env.CLOUDKEY}:${process.env.CLOUDSECRET}@easycare-ng`
@@ -58,7 +37,7 @@ mongoose.connect('mongodb://localhost:27017/eascareDb', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
-mongoose.set("useCreateIndex", true);
+// mongoose.set("useCreateIndex", true);
 
 
 
@@ -87,14 +66,33 @@ const adminSchema = new mongoose.Schema({
 
 // users collection encryption
 userSchema.plugin(pLMongoose);
+userSchema.plugin(findOrCreate);
 
 const Clients = mongoose.model("Client", clientSchema);
 const CGivers = mongoose.model("CareGiver", careGiverSchema);
 const User = mongoose.model("User", userSchema);
 
-passport.serializeUser(User.serializeUser());
-passport.deserializeUser(User.deserializeUser());
+passport.serializeUser(function(user, done) {
+  done(null, user.id);
+});
 
+passport.deserializeUser(function(id, done) {
+  User.findById(id, function(err, user) {
+    done(err, user);
+  });
+});
+passport.use(new GoogleStrategy({
+  clientID: process.env.GOOGLE_CLIENT_ID,
+  clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+  callbackURL: "http://localhost:3030/oauth20/google/",
+  // userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo"
+},
+function(accessToken, refreshToken, profile, cb) {
+  User.findOrCreate({ googleId: profile.id }, function (err, user) {
+    return cb(err, user);
+  });
+}
+));
 
 
 // res.json() to send json data
@@ -118,7 +116,7 @@ app
 
     
 
-    User.findOne({ email: mail }, function (err, foundUser) {
+    User.findOne({ email: req.body.mail }, function (err, foundUser) {
       if (err) {
         console.log("user collection error:", err);
       } else {
@@ -142,6 +140,16 @@ app
     });
 });
 
+app.get("/login/google", (req, res) => {
+  passport.authenticate('google', { scope: ['profile'] });
+});
+
+app.get('/oauth20/google/profile', 
+passport.authenticate('google', { failureRedirect: '/login' }),
+function(req, res) {
+  // Successful authentication, redirect home.
+  res.redirect('/profile');
+});
 
 app
   .route("/signup")
@@ -153,8 +161,7 @@ app
       } else { 
         if (foundUser) {
             
-            res.write("you're already a member of this site.", "utf-8");
-            res.redirect('/login');
+            res.redirect('/login/already');
         } else {
           User.register({username: req.body.mail.toLowerCase()}, req.body.password, (err, user) => {
             if (err) {
@@ -169,15 +176,13 @@ app
                 }
                 let output = saveToDb(data, Clients);
                 if (!output) {
-                  res.write("success in creating account", 'utf-8');
-                  res.end('\n redirect to profile page');
+                  res.redirect('/profile');
                 } else {
-                  res.write('error sending message');
                   res.redirect('/signup');
                 }
                 // res.write('welcome to the family')
                 // res.json()
-                res.redirect('/profile-page');
+                res.redirect('/profile');
               })
             }
           })
@@ -200,8 +205,7 @@ app
       } else { 
         if (foundUser) {
             
-            res.write("you're already a member of this site.", "utf-8");
-            res.redirect('/login');
+            res.redirect('/login/already');
         } else {
           User.register({username: req.body.mail.toLowerCase()}, req.body.password, (err, user) => {
             if (err) {
@@ -216,15 +220,13 @@ app
                 }
                 let output = saveToDb(data, CGivers);
                 if (!output) {
-                  res.write("success in creating account", 'utf-8');
-                  res.end('\n redirect to profile page');
+                  res.redirect('/profile');
                 } else {
-                  res.write('error sending message');
-                  res.redirect('/caregiver/signup');
+                  res.redirect('/caregiver/signup/failure');
                 }
                 // res.write('welcome to the family')
                 // res.json()
-                res.redirect('/caregiver/profile-page');
+                res.redirect('/caregiver/profile');
               })
             }
           })
@@ -247,11 +249,15 @@ app
 
 app.get('/profile', (req, res) => {
   if(req.isAuthenticated()){
-    res.json({fullname: 'john doe', mail: 'john@doe.com'})
+    res.write('welcome to easy care!', 'utf8');
+    res.json({fullname: 'john doe', mail: 'john@doe.com'});
+    res.end();
   } else {
     res.redirect('/login');
   }
 })
+
+
 
 
 
@@ -281,7 +287,7 @@ app.post("/contact", (req, res) => {
   }
   else{
     res.write('error sending message', 'utf-8');
-    res.redirect('/contact');
+    res.end();
   }
 });
 
@@ -295,6 +301,34 @@ function saveToDb(obj, collectionName){
     }
   })
 }
+
+
+const transporter = mailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: 'youremail@gmail.com',
+    pass: 'yourpassword'
+  }
+});
+
+let mailOptions= {
+  from: 'youremail@gmail.com',
+  to: 'myFriend@gmail.com', // multiple reciepients 'a@mail.com, b@gamil.com '
+  subject: 'Sending Email using Node.js',
+  text: 'this was some what easy!.. ;)' // or html: '<h1>welcome</h1><p>that was easy!</p>'
+};
+
+function sendMail(auth, options){
+  auth.sendMail(options, function(error, info){
+    if (error) {
+      console.error(error, 'line 30: mail sender function');
+    } else {
+      console.log('Email sent ', info.response);
+    }
+  })
+}
+
+
 //Server initialization
 app.listen(process.env.PORT || 3030, () => {
   console.log("Server is Live and running!");
