@@ -1,12 +1,40 @@
-//node modules initialisation
+"use strict";
+//node modules initialization
 require("dotenv").config();
 const _ = require("lodash");
 const mongoose = require("mongoose");
 const express = require("express");
 const encrypt = require("mongoose-encryption");
-const Bcrypt = require("bcrypt");
-const saltRounds = 5;
 const cloudinary = require('cloudinary');
+const mailer = require('nodemailer');
+const session = require("express-session")
+const passport = require("passport");
+const pLMongoose = require("passport-local-mongoose");
+
+const transporter = mailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: 'youremail@gmail.com',
+    pass: 'yourpassword'
+  }
+});
+
+let mailOptions= {
+  from: 'youremail@gmail.com',
+  to: 'myFriend@gmail.com', // multiple reciepients 'a@mail.com, b@gamil.com '
+  subject: 'Sending Email using Node.js',
+  text: 'this was some what easy!.. ;)' // or html: '<h1>welcome</h1><p>that was easy!</p>'
+};
+
+function sendMail(auth, options){
+  auth.sendMail(options, function(error, info){
+    if (error) {
+      console.error(error, 'line 30: mail sender function');
+    } else {
+      console.log('Email sent ', info.response);
+    }
+  })
+}
 
 //`mongodb+srv://protege47007:${process.env.PASS}@cluster0.5nisq.mongodb.net/easycareDb`
 // CLOUDINARY_URL=`cloudinary://${process.env.CLOUDKEY}:${process.env.CLOUDSECRET}@easycare-ng`
@@ -14,69 +42,100 @@ const cloudinary = require('cloudinary');
 //calling express
 const app = express();
 
+
+app.use(express.urlencoded({ extended: true }));
+app.use(session({
+  secret: process.env.KEY,
+  resave: false,
+  saveUninitialized: false
+}));
+app.use(passport.initialize());
+app.use(passport.session());
+
+
+
 mongoose.connect('mongodb://localhost:27017/eascareDb', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
+mongoose.set("useCreateIndex", true);
 
-app.use(express.urlencoded({ extended: true }));
+
 
 //schemas declaration
-const userSchema = new mongoose.Schema({
+const clientSchema = new mongoose.Schema({
   fullname: String,
   email: String,
-  password: String,
 });
+
+const careGiverSchema = new mongoose.Schema({
+  fullname: String,
+  email: String,
+});
+
+const userSchema = new mongoose.Schema({
+  username: String,
+  password: String
+});
+
+const adminSchema = new mongoose.Schema({
+  username: String,
+  fullname: String
+});
+
+
 
 // users collection encryption
-userSchema.plugin(encrypt, {
-  secret: process.env.KEY,
-  encryptedFields: ["password"],
-});
+userSchema.plugin(pLMongoose);
+
+const Clients = mongoose.model("Client", clientSchema);
+const CGivers = mongoose.model("CareGiver", careGiverSchema);
 const User = mongoose.model("User", userSchema);
 
-// //sudo user collection
-// const sudoUserSchema = new mongoose.Schema({
-//   fullname: String,
-//   email: String,
-//   password: String,
-// });
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
-// //sudo user collection encryption
-// sudoUserSchema.plugin(encrypt, {
-//   secret: process.env.KEY,
-//   encryptedFields: ["password"],
-// });
-// const SudoUser = mongoose.model("SudoUser", sudoUserSchema);
+
+
+// res.json() to send json data
+
+//admin routes
+app
+  .route("/admin/:para")
+  .post((req,res) => {
+
+  })
 
 //routes
 app
   .route("/login") // client's login route
 
   .post((req, res) => {
-    mail = req.body.mail.toLowerCase();
+    const user = {
+      username: req.body.mail,
+      password: req.body.password,
+    }
+
+    
 
     User.findOne({ email: mail }, function (err, foundUser) {
       if (err) {
         console.log("user collection error:", err);
       } else {
         if (foundUser) {
-            console.log(foundUser);
-            Bcrypt.compare(req.body.password, foundUser.password, function (err, output) {
-                
-                 if (output === true) {
-                    res.write("Redirect to success screen then back to home screen", "utf-8");
-                    res.end('end of stream');
-                } else {
-                    res.write("Current password/email does not match", "utf-8");
-                    res.end();
-                    
-                }
-            });
-          
+          req.login(user, (err)=>{
+            if (err) {
+              console.error(err, 'login error');
+            } else{
+              passport.authenticate('local') (req, res, () => {
+                res.write('successfully logged in redirecting to profile page', 'utf8');
+                res.end();
+                // res.redirect('/profile');
+              })
+            }
+          });
         } else {
             res.write("Current password/email does not match*", "utf-8");
-            res.end();
             res.redirect('/login');
         }
       }
@@ -95,35 +154,106 @@ app
         if (foundUser) {
             
             res.write("you're already a member of this site.", "utf-8");
-            res.end();
-        }
-        else{
-        createNewUser(req.body.fullname.toLowerCase(), req.body.mail.toLowerCase(), req.body.password)
-        } 
+            res.redirect('/login');
+        } else {
+          User.register({username: req.body.mail.toLowerCase()}, req.body.password, (err, user) => {
+            if (err) {
+              console.error(err);
+              res.redirect('/signup')
+            } else {
+              passport.authenticate('local')(req, res, () => {
+                //new clients db collection with their fullname, mail, and other details
+                let data = {
+                  fullname: req.body.fullname,
+                  email: req.body.mail,
+                }
+                let output = saveToDb(data, Clients);
+                if (!output) {
+                  res.write("success in creating account", 'utf-8');
+                  res.end('\n redirect to profile page');
+                } else {
+                  res.write('error sending message');
+                  res.redirect('/signup');
+                }
+                // res.write('welcome to the family')
+                // res.json()
+                res.redirect('/profile-page');
+              })
+            }
+          })
+        }  
       }
     }); 
+  });
 
-    function createNewUser(name, mail, password){
+  app.get('/logout', (req, res) => {
+    req.logOut();
+    res.redirect('/');
+  })
 
-      Bcrypt.hash(password, saltRounds, function (err, hash) {
-        console.error(err, 'line 108: hashing error');
-        const newUser = new User({
-          fullname: name,
-          email: mail,
-          password: hash,
-      });
-      
-      newUser.save (function (err) {
-        if (err) {
-          console.error(err, 'saving the user data has generated an error');
+app
+  .route('/caregiver/signup')
+  .post((req, res) => {
+    User.findOne({ email: req.body.mail }, function (err, foundUser) {
+      if (err) {
+        console.log("user collection error:", err);
+      } else { 
+        if (foundUser) {
+            
+            res.write("you're already a member of this site.", "utf-8");
+            res.redirect('/login');
         } else {
-          res.write("success in creating account", 'utf-8');
-          res.end('homePage');
-        }
-      });
-    });
+          User.register({username: req.body.mail.toLowerCase()}, req.body.password, (err, user) => {
+            if (err) {
+              console.error(err);
+              res.redirect('/signup')
+            } else {
+              passport.authenticate('local')(req, res, () => {
+                //new clients db collection with their fullname, mail, and other details
+                let data = {
+                  fullname: req.body.fullname,
+                  email: req.body.mail,
+                }
+                let output = saveToDb(data, CGivers);
+                if (!output) {
+                  res.write("success in creating account", 'utf-8');
+                  res.end('\n redirect to profile page');
+                } else {
+                  res.write('error sending message');
+                  res.redirect('/caregiver/signup');
+                }
+                // res.write('welcome to the family')
+                // res.json()
+                res.redirect('/caregiver/profile-page');
+              })
+            }
+          })
+        }  
+      }
+    }); 
+  })
+
+  .patch((req, res) => {
+    let data = req.body;
+    CGivers.findOneAndUpdate({email: data.mail}, (err, foundRecord) => {
+      if (err) {
+        console.error(err, 'line 228 caregiver patch failed');
+      } else {
+
+      }
+
+    })
+  })
+
+app.get('/profile', (req, res) => {
+  if(req.isAuthenticated()){
+    res.json({fullname: 'john doe', mail: 'john@doe.com'})
+  } else {
+    res.redirect('/login');
   }
-});
+})
+
+
 
 
 
@@ -139,80 +269,33 @@ const Contact = mongoose.model("contact", contactSchema);
 
 //contact form handler
 app.post("/contact", (req, res) => {
-
-  const newContact = new Contact({
+  let data = {
     fullname: req.body.fullname,
     email: req.body.mail,
     message: req.body.message,
-  });
-  console.log(newContact);
-
-  newContact.save(function (err) {
-    if (err) {
-      console.error(err, 'saving the user data has generated an error');
-    } else {
-      res.write("success in creating account", 'utf-8');
-      res.end('\n homePage');
-    }
-  });
-
-  
+  }
+  let output = saveToDb(data, Contact);
+  if (!output) {
+    res.write("message sent! We would contact you as soon as possible", 'utf-8');
+    res.end('\n homePage');
+  }
+  else{
+    res.write('error sending message', 'utf-8');
+    res.redirect('/contact');
+  }
 });
 
 
-
-//Server initialisation
+function saveToDb(obj, collectionName){
+  const instance = new collectionName(obj);
+  instance.save((err) => {
+    if (err) {
+      console.error('instance save error with ', obj, err);
+      return true;
+    }
+  })
+}
+//Server initialization
 app.listen(process.env.PORT || 3030, () => {
   console.log("Server is Live and running!");
 });
-
-
-/*
-*
-*
-*
-*
-*
-*
-*
-*
-*
-*
-*
-*
-*
-*
-*
-*/
-(async function () {
-  const data = JSON.stringify({
-    query: `{
-characters(isMonster:true) {
-name
-episode {
-  name
-}
-}
-}`,
-  });
-
-  const response = await fetch(
-    'https://biggs.stepzen.net/scoobydoo/scoobydoo/__graphql',
-    {
-      method: 'post',
-      body: data,
-      headers: {
-        'Content-Type': 'application/json',
-        'Content-Length': data.length,
-        Authorization:
-          'Apikey DONOTSENDAPIKEYS',
-      },
-    }
-  );
-
-  const json = await response.json();
-  document.getElementById('code').innerHTML = js_beautify(
-    JSON.stringify(json.data)
-  );
-  Prism.highlightAll();
-})();
