@@ -5,36 +5,14 @@ const _ = require("lodash");
 const mongoose = require("mongoose");
 const express = require("express");
 const encrypt = require("mongoose-encryption");
+const bcrypt = require('bcrypt');
 const cloudinary = require('cloudinary');
 const mailer = require('nodemailer');
 const session = require("express-session")
 const passport = require("passport");
 const pLMongoose = require("passport-local-mongoose");
 
-const transporter = mailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: 'youremail@gmail.com',
-    pass: 'yourpassword'
-  }
-});
 
-let mailOptions= {
-  from: 'youremail@gmail.com',
-  to: 'myFriend@gmail.com', // multiple reciepients 'a@mail.com, b@gamil.com '
-  subject: 'Sending Email using Node.js',
-  text: 'this was some what easy!.. ;)' // or html: '<h1>welcome</h1><p>that was easy!</p>'
-};
-
-function sendMail(auth, options){
-  auth.sendMail(options, function(error, info){
-    if (error) {
-      console.error(error, 'line 30: mail sender function');
-    } else {
-      console.log('Email sent ', info.response);
-    }
-  })
-}
 
 //`mongodb+srv://protege47007:${process.env.PASS}@cluster0.5nisq.mongodb.net/easycareDb`
 // CLOUDINARY_URL=`cloudinary://${process.env.CLOUDKEY}:${process.env.CLOUDSECRET}@easycare-ng`
@@ -86,14 +64,22 @@ const adminSchema = new mongoose.Schema({
 
 
 // users collection encryption
+userSchema.plugin(encrypt);
 userSchema.plugin(pLMongoose);
 
 const Clients = mongoose.model("Client", clientSchema);
 const CGivers = mongoose.model("CareGiver", careGiverSchema);
 const User = mongoose.model("User", userSchema);
 
-passport.serializeUser(User.serializeUser());
-passport.deserializeUser(User.deserializeUser());
+passport.serializeUser(function(user, done) {
+  done(null, user.id);
+});
+
+passport.deserializeUser(function(id, done) {
+  User.findById(id, function(err, user) {
+    done(err, user);
+  });
+});
 
 
 
@@ -102,6 +88,7 @@ passport.deserializeUser(User.deserializeUser());
 //admin routes
 app
   .route("/admin/:para")
+  .get((req, res) => {})
   .post((req,res) => {
 
   })
@@ -127,15 +114,16 @@ app
             if (err) {
               console.error(err, 'login error');
             } else{
-              passport.authenticate('local') (req, res, () => {
-                res.write('successfully logged in redirecting to profile page', 'utf8');
-                res.end();
-                // res.redirect('/profile');
-              })
+              passport.authenticate('local', {
+                successRedirect: '/profile',
+                failureRedirect: '/login', //with a flag to indicate failure,
+                failureFlash: 'incorrect email/password',
+                successFlash: 'Welcome to easy care!'
+              });
             }
           });
         } else {
-            res.write("Current password/email does not match*", "utf-8");
+            res.writeHead(401, "incorrect password/email", "utf-8");
             res.redirect('/login');
         }
       }
@@ -295,6 +283,35 @@ function saveToDb(obj, collectionName){
     }
   })
 }
+
+
+const transporter = mailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: 'youremail@gmail.com',
+    pass: 'yourpassword'
+  }
+});
+
+let mailOptions= {
+  from: 'youremail@gmail.com',
+  to: 'myFriend@gmail.com', // multiple reciepients 'a@mail.com, b@gamil.com '
+  subject: 'Sending Email using Node.js',
+  text: 'this was some what easy!.. ;)' // or html: '<h1>welcome</h1><p>that was easy!</p>'
+};
+
+function sendMail(auth, options){
+  auth.sendMail(options, function(error, info){
+    if (error) {
+      console.error(error, 'line 30: mail sender function');
+    } else {
+      console.log('Email sent ', info.response);
+    }
+  })
+}
+
+
+
 //Server initialization
 app.listen(process.env.PORT || 3030, () => {
   console.log("Server is Live and running!");
