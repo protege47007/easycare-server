@@ -39,7 +39,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // 'mongodb://localhost:27017/easycareDb'
-mongoose.connect("mongodb://localhost:27017/easycareDb", {
+mongoose.connect(`mongodb+srv://protege47007:${process.env.PASS}@cluster0.5nisq.mongodb.net/easycareDb`, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
@@ -340,6 +340,7 @@ app
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
+const path = require('path');
 
 const DatauriParser = require('datauri/parser');
 const parser = new DatauriParser();
