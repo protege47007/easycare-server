@@ -88,7 +88,7 @@ passport.use(
     {
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: "http://localhost:3030/auth/google/",
+      callbackURL: "https://mighty-thicket-98219.herokuapp.com/auth/google/",
       // userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo"
     },
     function (accessToken, refreshToken, profile, cb) {
@@ -100,7 +100,9 @@ passport.use(
 );
 
 // res.json() to send json data
-
+app.get('/', (req, res) => {
+  res.writeHead(200, ).send('welcome to easy care!');
+})
 //admin routes
 app.route("/admin/:para").post((req, res) => {});
 
