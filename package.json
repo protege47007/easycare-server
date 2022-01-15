@@ -4,7 +4,6 @@
   "description": "a caregiver application for senior citizens. developed by TEAM16 of the sidehustle bootcamp cohort 4.0",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node app.js"
   },
   "repository": {
