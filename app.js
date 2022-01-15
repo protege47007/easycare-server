@@ -5,21 +5,33 @@ const _ = require("lodash");
 const mongoose = require("mongoose");
 const express = require("express");
 const encrypt = require("mongoose-encryption");
+<<<<<<< HEAD
 const cloudinary = require("cloudinary").v2;
 const mailer = require("nodemailer");
 const session = require("express-session");
+=======
+const bcrypt = require('bcrypt');
+const cloudinary = require('cloudinary');
+const mailer = require('nodemailer');
+const session = require("express-session")
+>>>>>>> master
 const passport = require("passport");
 const passportLocalMongoose = require("passport-local-mongoose");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const findOrCreate = require("mongoose-findorcreate");
 const multer = require("multer");
 
+<<<<<<< HEAD
 cloudinary.config({
   cloud_name: "easycare-ng",
   api_key: process.env.CLOUD_KEY,
   api_secret: process.env.CLOUD_SECRET,
 });
 
+=======
+
+
+>>>>>>> master
 //`mongodb+srv://protege47007:${process.env.PASS}@cluster0.5nisq.mongodb.net/easycareDb`
 // CLOUDINARY_URL=`cloudinary://${process.env.CLOUD_KEY}:${process.env.CLOUD_SECRET}@easycare-ng`
 
@@ -67,16 +79,34 @@ const adminSchema = new mongoose.Schema({
 });
 
 // users collection encryption
+<<<<<<< HEAD
 userSchema.plugin(passportLocalMongoose);
 userSchema.plugin(findOrCreate);
+=======
+userSchema.plugin(encrypt);
+userSchema.plugin(pLMongoose);
+>>>>>>> master
 
 const Client = mongoose.model("Client", clientSchema);
 const CGiver = mongoose.model("CareGiver", careGiverSchema);
 const User = mongoose.model("User", userSchema);
 
+<<<<<<< HEAD
 passport.serializeUser(function (user, done) {
   done(null, user.id);
 });
+=======
+passport.serializeUser(function(user, done) {
+  done(null, user.id);
+});
+
+passport.deserializeUser(function(id, done) {
+  User.findById(id, function(err, user) {
+    done(err, user);
+  });
+});
+
+>>>>>>> master
 
 passport.deserializeUser(function (id, done) {
   User.findById(id, function (err, user) {
@@ -102,7 +132,16 @@ passport.use(
 // res.json() to send json data
 
 //admin routes
+<<<<<<< HEAD
 app.route("/admin/:para").post((req, res) => {});
+=======
+app
+  .route("/admin/:para")
+  .get((req, res) => {})
+  .post((req,res) => {
+
+  })
+>>>>>>> master
 
 //routes
 app
@@ -121,17 +160,32 @@ app
         if (foundUser) {
           req.login(user, (err) => {
             if (err) {
+<<<<<<< HEAD
               console.error(err, "login error");
             } else {
               passport.authenticate("local", {
                 failureRedirect: "/login",
               })(req, res, () => {
                 res.redirect("/profile");
+=======
+              console.error(err, 'login error');
+            } else{
+              passport.authenticate('local', {
+                successRedirect: '/profile',
+                failureRedirect: '/login', //with a flag to indicate failure,
+                failureFlash: 'incorrect email/password',
+                successFlash: 'Welcome to easy care!'
+>>>>>>> master
               });
             }
           });
         } else {
+<<<<<<< HEAD
           res.redirect("/login");
+=======
+            res.writeHead(401, "incorrect password/email", "utf-8");
+            res.redirect('/login');
+>>>>>>> master
         }
       }
     });
@@ -389,6 +443,7 @@ function saveToDb(obj, collectionName) {
   });
 }
 
+<<<<<<< HEAD
 const transporter = mailer.createTransport({
   service: "gmail",
   auth: {
@@ -414,6 +469,36 @@ function sendMail(auth, options) {
   });
 }
 
+=======
+
+const transporter = mailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: 'youremail@gmail.com',
+    pass: 'yourpassword'
+  }
+});
+
+let mailOptions= {
+  from: 'youremail@gmail.com',
+  to: 'myFriend@gmail.com', // multiple reciepients 'a@mail.com, b@gamil.com '
+  subject: 'Sending Email using Node.js',
+  text: 'this was some what easy!.. ;)' // or html: '<h1>welcome</h1><p>that was easy!</p>'
+};
+
+function sendMail(auth, options){
+  auth.sendMail(options, function(error, info){
+    if (error) {
+      console.error(error, 'line 30: mail sender function');
+    } else {
+      console.log('Email sent ', info.response);
+    }
+  })
+}
+
+
+
+>>>>>>> master
 //Server initialization
 app.listen(process.env.PORT || 3030, () => {
   console.log("Server is Live and running!");
