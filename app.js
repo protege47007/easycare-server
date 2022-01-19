@@ -4,7 +4,8 @@ require("dotenv").config();
 const _ = require("lodash");
 const mongoose = require("mongoose");
 const express = require("express");
-const encrypt = require("mongoose-encryption");
+const encrypt = require("mongoose-encryption");//uninstall this
+const bcrypt = require("bcrypt");//uninstall this
 const cloudinary = require("cloudinary").v2;
 const mailer = require("nodemailer");
 const session = require("express-session");
@@ -13,6 +14,7 @@ const passportLocalMongoose = require("passport-local-mongoose");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const findOrCreate = require("mongoose-findorcreate");
 const multer = require("multer");
+const ejs = require("ejs");
 
 cloudinary.config({
   cloud_name: "easycare-ng",
@@ -25,7 +27,8 @@ cloudinary.config({
 
 //calling express
 const app = express();
-
+app.set('view engine', 'ejs')
+app.use(express.static('public'));
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ limit: "10mb", extended: true }));
 app.use(
@@ -38,12 +41,13 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
+
+//mongoDB instance
 // 'mongodb://localhost:27017/easycareDb'
 mongoose.connect(`mongodb+srv://protege47007:${process.env.PASS}@cluster0.5nisq.mongodb.net/easycareDb`, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
-// mongoose.set("useCreateIndex", true);
 
 //schemas declaration
 const clientSchema = new mongoose.Schema({
@@ -109,7 +113,9 @@ app.route("/admin/:para").post((req, res) => {});
 //routes
 app
   .route("/login") // client's login route
-
+  .get((req, res) => {
+    res.render('auth/login');
+  })
   .post((req, res) => {
     const user = {
       username: req.body.mail,
@@ -154,7 +160,9 @@ app.get(
 
 app
   .route("/signup")
-
+  .get((req, res) => {
+    res.render('auth/signup');
+  })
   .post((req, res) => {
     User.findOne(
       { email: req.body.mail.toLowerCase() },
@@ -271,7 +279,11 @@ const contactSchema = new mongoose.Schema({
 const Contact = mongoose.model("contact", contactSchema);
 
 //contact form handler
-app.post("/contact", (req, res) => {
+app.route("/contact")
+  .get((req, res) => {
+    res.render('main/contact');
+  })
+.post("/contact", (req, res) => {
   let data = {
     fullname: req.body.fullname,
     email: req.body.mail,
@@ -307,6 +319,9 @@ const Article = mongoose.model("article", articleSchema);
 
 app
   .route("/news")
+  .get((req, res) => {
+    res.render('main/news');
+  })
   .post(async (req, res) => {
     try {
       await cloudinary.uploader.upload(
@@ -331,14 +346,14 @@ app
     }
   })
 
-  .get((req, res) => {
-    Article.find({}, (err, articles) => {
-      if (err) console.log("error getting news articles");
-      else {
-        res.send(articles);
-      }
-    });
-  });
+  // .get((req, res) => {
+  //   Article.find({}, (err, articles) => {
+  //     if (err) console.log("error getting news articles");
+  //     else {
+  //       res.send(articles);
+  //     }
+  //   });
+  // });
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage });

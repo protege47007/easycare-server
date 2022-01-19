@@ -1,0 +1,298 @@
+@import url('https://fonts.googleapis.com/css2?family=Lora:wght@400;500;600&family=Open+Sans:wght@400;600&display=swap');
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body{
+    margin: 0 auto;
+    font-family: 'Open Sans', sans-serif;
+}
+img{
+    max-width: 100%;
+
+}
+
+nav {
+  display: flex;
+  justify-content: space-between;
+  margin: 0;
+  padding: 0 4rem;
+}
+.menu {
+  width: 35px;
+  height: 5px;
+  background-color: black;
+  margin: 6px 0;
+  -webkit-transition: all 0.3s ease-in-out;
+  transition: 0.3s ease-in-out;
+}
+.hamburger {
+    margin-top: .6rem;
+  display: none;
+  cursor: pointer;
+}
+
+.nav-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: block;
+  align-items: center;
+}
+.nav-btn{
+    background-color: #49C255;
+    color: #fff;
+    padding: .3em .5em; 
+    text-transform: capitalize;
+    margin-left: 3rem;
+}
+.nav-link,
+.nav-log {
+  text-decoration: none;
+  color: #3a3a3a;
+  text-transform: capitalize;
+  margin-left: 1em;
+  font-family: "Open Sans", sans-serif;
+}
+.active{
+    color: #004492;
+  font-weight: 600;
+  border-bottom: 3px solid #004492;
+}
+ .nav-link:hover {
+  color: #004492;
+  font-weight: 600;
+}
+
+.Offer {
+  background: linear-gradient(rgba(0, 68, 146, 0.534), rgba(0, 68, 146, 0.438)),
+    url("../images/hero.jpg") center center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  width: 100%;
+  color: #fff;
+  padding: 4rem;
+  text-align: center;
+  text-transform: capitalize;
+}
+
+.Offer img {
+  width: 100%;
+}
+
+h1 {
+  line-height: 4.3rem;
+  font-size: 2.5rem;
+  font-family: "Lora", serif;
+  font-weight: 600;
+  text-align: center;
+}
+
+p {
+  line-height: 1.5rem;
+  font-size: 1.12rem;
+  font-family: "Open Sans", sans-serif;
+}
+h2 {
+  color: #002e68;
+  font-family: "Lora", serif;
+  font-size: 1.87rem;
+  padding-bottom: 2rem;
+}
+
+a {
+  text-decoration: none;
+  font-family: "Open Sans", sans-serif;
+}
+section{
+    padding: 2rem;
+}
+section img{
+    width: 100%;
+}
+.section-text{
+    width: 100%;
+}
+.section-main{
+    background-color: #FBFBFB;
+}
+.section-img{
+    width: 100%;
+}
+section p, h2{
+    padding: 0 1rem;
+}
+footer{
+    background-color: #001A41;
+    color: #fff;
+    
+}
+.footer{
+    padding: 5rem 5rem 0 5rem;
+}
+.footer-img,
+.footer-list{
+    margin-top: 2rem;
+}
+.footer-items{
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    line-height: 1.4rem;
+}
+.footer-link{
+    color: #fff;
+    text-transform: capitalize;
+    font-weight: 400;
+    font-size: 0.9rem;
+}
+.footer-link:hover{
+    color: rgb(22, 138, 153);
+    font-weight: bold;
+}
+.footer-img-text{
+    font-size: 0.75rem;
+    margin-top: 4rem;
+    border-top: 1px solid white;
+    bottom: 0;
+    text-align: right;
+    padding: 1rem;
+}
+.footer-logo{
+    padding-left: 0.5rem;
+}
+
+.fa {
+    padding: 15px;
+    font-size: 1.9rem;
+    width: 30px;
+    text-align: center;
+    text-decoration: none;
+    margin: 5px 5px;
+  }
+
+  .fa-facebook, .fa-instagram, .fa-twitter, .fa-linkedin, .fa-apple{
+    color: white;
+  }
+  .fa-facebook:hover, .fa-instagram:hover, .fa-twitter:hover, .fa-linkedin:hover{
+      color: rgb(22, 138, 153);
+  }
+  .apple{
+      width: 80%;
+      padding: 0.5rem;
+  }
+  .google-play{
+       width: 80%; 
+  }   
+
+
+  @media screen and (min-width: 768px){
+    .nav-img{
+        width: 5%;
+    }
+    .nav-log{
+        display: none;
+    }
+  
+    #icon{
+        display: hidden;
+    }
+    
+    .nav-list{
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        display: flex;
+        align-items: center;
+    }
+    .row{
+        display: flex;
+    }
+    h1{
+        font-size: 3rem;
+    }
+    section{
+        padding: 5rem 6rem;
+    }
+    .Offer{
+        padding: 10rem;
+    }
+    .section-text{
+        margin-left: 3rem;
+    }
+  .footer-list {
+    width: 100%;
+  }
+  .footer-img {
+    right: 0;
+    padding: 0.5rem;
+    width: 100%;
+  }
+  .footer-items li {
+    padding-bottom: 2rem;
+  }
+  .apple {
+    width: 40%;
+  }
+  .google-play {
+    width: 45%;
+  }
+}
+
+@media screen and (max-width: 890px) {
+  .nav-log {
+    display: inline;
+  }
+}
+@media screen and (max-width: 890px) {
+  .nav-img {
+    width: 20%;
+  }
+  .nav-list {
+    display: block;
+    text-align: center;
+    width: 100%;
+    background-color: #fff;
+    top: 80px;
+    gap: 0;
+    left: -100%;
+    position: fixed;
+    transition: 0.3s;
+    padding: 2rem;
+  }
+  .nav-link,
+  .nav-log {
+    margin: 3rem 0;
+    font-size: 20px;
+  }
+  .nav-list.active {
+    left: 0;
+  }
+  .nav-link:hover,
+  .nav-link:hover {
+    background-color: #4fdbd2;
+    font-weight: bold;
+  }
+  .nav-btn {
+    display: none;
+  }
+
+  .hamburger {
+    display: block;
+  }
+  .hamburger.active .menu:nth-child(2) {
+    opacity: 0;
+  }
+  .hamburger.active .menu:nth-child(1) {
+    transform: translateY(8px) rotate(45deg);
+  }
+  .hamburger.active .menu:nth-child(3) {
+    transform: translateY(-8px) rotate(-45deg);
+  }
+  .footer-logo {
+    margin-top: 1rem;
+  }
+}

@@ -1,0 +1,19 @@
+<%- include ('../header/header.ejs', {styles: "/styles/newsarticle.css"}) -%>
+<div class="heading">
+    <h1>TRENDING</h1>
+</div>
+</header>
+
+<main>
+    <!-- section 1 -->
+        <!-- blog --><%- include ('./components/blog.ejs') -%>
+    <!-- section 2 -->
+    <!-- health --><%- include ('./components/health.ejs') -%>
+
+<!-- food --><%- include ('./components/food.ejs') -%>
+
+
+
+</main>
+
+<%- include ('../footer/footer.ejs', {src: "/scripts/newsarticle.js"}) -%>
