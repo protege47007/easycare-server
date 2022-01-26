@@ -1,15 +1,14 @@
-const hamburger = document.querySelector('.hamburger');
-const navList = document.querySelector('.nav-list');
+function $(id) {
+  return document.querySelector(id);
+}
+const form = $('#contactForm');
 
 
-icon.addEventListener('click' , () =>{
-    hamburger.classList.toggle("active");
-    navList.classList.toggle("active");
+form.addEventListener('onsubmit', (e) => {
+  e.preventDefault();
+  const option = {
+    fullname: $('#fullName').value,
+    mail: $('#mail').value,
+    message: $('#message').value
+  }
 })
-
-document.querySelectorAll(".nav-link").forEach(n => n.
-  addEventListener("click", () => {
-    hamburger.classList.remove("active");
-    navList.classList.remove("active");
-
-  }))

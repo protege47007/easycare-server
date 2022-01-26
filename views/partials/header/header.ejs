@@ -1,26 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Home</title>
-    <link rel="stylesheet" href="<%= styles %> ">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">  
-</head>
-<body>
-    
+    <!-- local stylesheet -->
+    <link rel="stylesheet" href="<%= styles %> " />
+    <!-- external stylesheet -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <!-- scripts -->
+    <script src="/scripts/index.js" defer></script>
+    <script src="<%= submit %> "></script>
+  </head>
+  <body>
     <header>
-            <nav>
-                <img src="images/logo.svg" alt="logo" class="nav-img">
-                
-            
-                <ul class="nav-list" id="menu">
-                    <li><a href="./index.html" class="nav-link active">Home</a></li>
-                    <li><a href="./index/about.html" class="nav-link">about us</a></li>
-                    <li><a href="./index/services.html" class="nav-link">our services</a></li>
-                    <li><a href="./index/newsarticle.html" class="nav-link">news articles</a></li>
-                    <li><a href="./index/contact.html" class="nav-link">contact us</a></li>
-                    <li><a href="./index/signout.html" class="nav-link nav-btn">Sign in</a></li>
-                    <li><a href="./index/signout.html" class="nav-log">Sign in</a></li>
-                </ul>
+      <nav>
+        <img src="images/logo.svg" alt="logo" class="nav-img" />
+
+        <ul class="nav-list" id="menu">
+          <li><a href="/" class="nav-link">Home</a></li>
+          <li><a href="/about" class="nav-link">about us</a></li>
+          <li>
+            <a href="/services" class="nav-link">our services</a>
+          </li>
+          <li>
+            <a href="/news" class="nav-link"
+              >news articles</a
+            >
+          </li>
+          <li>
+            <a href="/contact" class="nav-link">contact us</a>
+          </li>
+          <li>
+            <a href="/login" class="nav-link nav-btn">Sign in</a>
+          </li>
+        </ul>
+      </nav>
+    </header>

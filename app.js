@@ -43,8 +43,9 @@ app.use(passport.session());
 
 
 //mongoDB instance
-// 'mongodb://localhost:27017/easycareDb'
-mongoose.connect(`mongodb+srv://protege47007:${process.env.PASS}@cluster0.5nisq.mongodb.net/easycareDb`, {
+// `mongodb+srv://protege47007:${process.env.PASS}@cluster0.5nisq.mongodb.net/easycareDb`
+// 
+mongoose.connect('mongodb://localhost:27017/easycareDb', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
@@ -103,14 +104,15 @@ passport.use(
   )
 );
 
-// res.json() to send json data
+// home page route
 app.get('/', (req, res) => {
-  res.writeHead(200, ).send('welcome to easy care!');
+  res.render('main/home')
 })
-//admin routes
-app.route("/admin/:para").post((req, res) => {});
 
-//routes
+
+
+
+// login routes
 app
   .route("/login") // client's login route
   .get((req, res) => {
@@ -158,6 +160,8 @@ app.get(
   }
 );
 
+
+//sign up route
 app
   .route("/signup")
   .get((req, res) => {
@@ -203,11 +207,15 @@ app
     );
   });
 
+
+// sign out route
 app.get("/logout", (req, res) => {
   req.logOut();
   res.redirect("/");
 });
 
+
+//care giver profile route
 app
   .route("/caregiver/signup")
   .post((req, res) => {
@@ -269,7 +277,10 @@ app.get("/profile", (req, res) => {
   }
 });
 
-///
+
+
+
+/// contact page route
 const contactSchema = new mongoose.Schema({
   fullname: String,
   email: String,
@@ -283,7 +294,7 @@ app.route("/contact")
   .get((req, res) => {
     res.render('main/contact');
   })
-.post("/contact", (req, res) => {
+.post( (req, res) => {
   let data = {
     fullname: req.body.fullname,
     email: req.body.mail,
@@ -317,6 +328,9 @@ const articleSchema = new mongoose.Schema({
 
 const Article = mongoose.model("article", articleSchema);
 
+
+
+//news page route
 app
   .route("/news")
   .get((req, res) => {
@@ -397,6 +411,26 @@ app.post("/news/test", upload.single("image"), async (req, res) => {
   }
 });
 
+//about us page route
+app
+  .route("/about")
+  .get((req, res) => {
+    res.render('main/about');
+  });
+
+
+
+app
+  .route("/services")
+  .get((req, res) => {
+    res.render('main/services');
+  });
+
+
+
+
+
+//saving to database function
 function saveToDb(obj, collectionName) {
   const instance = new collectionName(obj);
   instance.save((err) => {

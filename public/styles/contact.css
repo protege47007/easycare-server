@@ -19,7 +19,7 @@ nav{
     display: flex;
     justify-content: space-between;
     margin: 0;
-    padding: 0 4rem;
+    padding: 0 2rem;
 }
 .menu{
     width: 35px;
@@ -30,7 +30,7 @@ nav{
     transition: 0.3s ease-in-out;
 }
 .hamburger{
-    margin-top: 1rem;
+    margin-top: .4rem;
     display: none;
     cursor: pointer;
 }
@@ -230,6 +230,9 @@ footer{
     .row{
         display:grid;
         grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    }
+    .hamburger{
+        margin-top: 1rem;
     }
 }
 

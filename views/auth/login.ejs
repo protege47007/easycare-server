@@ -14,7 +14,7 @@
         <nav>
             <img src="../images/logo.svg" alt="logo" class="nav-img"> 
             <div class="signin-container">
-            <a href="../index/sign.html"><button type="submit" class="signup-btn">Sign up</button></a>
+            <a href="/signup"><button type="submit" class="signup-btn">Sign up</button></a>
         </div>
         </nav>
         <div>
@@ -23,27 +23,27 @@
         </header>
         <main>
             
-            <form action="">
+            <form id="loginForm" action="/login" method="post">
                 <div>
-                    <a href="www.gmail.com" class="google-icon">
-                        <i class="fa fa-google"></i>
-                        <button class="google-btn">Sign up with Google</button></a>
+                    <a href="/login/google" class="google-icon">
+                        
+                        <button class="google-btn"><img src="/images/google.png" class="google-img" alt="sign in with google">Sign up with Google</button></a>
 
                 </div>
                 <p>or use your email to sign in</p>
                 
                 <div class="input-icon">
                     <i class="fa fa-envelope"></i>
-                    <input type="text" id="email" placeholder="Email" required>
+                    <input type="text" id="email" placeholder="Email" name="mail" required>
                 </div>
                 <div class="input-icon">
                     <i class="fa fa-lock"></i>
-                    <input type="password" id="password" placeholder="Password" required>
+                    <input type="password" id="password" placeholder="Password" name="password" required>
                 </div>
                 
-                <a href="" class="link">I forgot my password</a>
+                <a href="/forgotten" class="link">I forgot my password</a>
                 
-                <a href="../index/dash.html"><button onclick="validation();" class="signin-btn">Sign In</button></a>
+                <button type="submit" value="submit" class="signin-btn">Sign In</button>
                 
             </form>
 

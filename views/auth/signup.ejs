@@ -1,63 +1,78 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Sign Up</title>
-    <link rel="stylesheet" href="/styles/sign.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">  
-</head>
-<body>
+    <link rel="stylesheet" href="/styles/sign.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+  </head>
+  <body>
     <header>
-        <nav>
-            <img src="../images/logo.svg" alt="logo" class="nav-img"> 
-            <div class="signin-container">
-            <a href="../index/signout.html"><button type="submit" class="signin-btn">Sign in</button></a>
+      <nav>
+        <img src="../images/logo.svg" alt="logo" class="nav-img" />
+        <div class="signin-container">
+          <a href="../index/signout.html"
+            ><button class="signin-btn">Sign in</button></a
+          >
         </div>
-        </nav>
-        <div>
-            <h1>Let's get you connected</h1>
+      </nav>
+      <div>
+        <h1>Let's get you connected</h1>
+      </div>
+    </header>
+
+    <main>
+      <form action="/signup" method="post">
+        <div class="input-icon">
+          <i class="fa fa-user"></i>
+          <input type="text" placeholder="Full Name" required />
         </div>
-        </header>
-        <main>
-            
-            <form action="">
-                <div class="input-icon">
-                    <i class="fa fa-user"></i>
-                    <input type="text" placeholder="Full Name" required>
-                </div>
-                <div class="input-icon">
-                    <i class="fa fa-envelope"></i>
-                    <input type="text" placeholder="Email" required>
-                </div>
-                <div class="input-icon">
-                    <i class="fa fa-lock"></i>
-                    <input type="password" placeholder="Password" required>
-                </div>
-                
-                
-                <div class="input-icon">
-                    <i class="fa fa-lock"></i>
-                    <input type="password" placeholder="Confirm Password" required>
-                </div>
-                <div class="terms"> 
-                    <input type="checkbox" id="terms" name="terms and condition" class="agreement" value="Agreement">
-                <label for="terms and condition"> I agree with EasyCare <a href="">Terms</a> and <a href="">Privacy Policy</a></label>
+        <div class="input-icon">
+          <i class="fa fa-envelope"></i>
+          <input type="text" placeholder="Email" required />
+        </div>
+        <div class="input-icon">
+          <i class="fa fa-lock"></i>
+          <input type="password" placeholder="Password" required />
+        </div>
 
-                </div>
-                
-                <a href="../index/sign.html"><button class="signup-btn">Sign Up</button></a>
-                <p>or sign up with:</p>
-                
-                <div>
-                    <a href="www.gmail.com" class="google-icon">
-                        <i class="fa fa-google"></i>
-                        <button class="google-btn">Sign up with Google</button></a>
+        <div class="input-icon">
+          <i class="fa fa-lock"></i>
+          <input type="password" placeholder="Confirm Password" required />
+        </div>
+        <div class="terms">
+          <input
+            type="checkbox"
+            id="terms"
+            name="terms"
+            class="agreement"
+            value="checked"
+            required
+          />
+          <label for="terms and condition">
+            I agree with EasyCare's <a href="/terms">Terms</a> and
+            <a href="/privacy">Privacy Policy</a></label
+          >
+        </div>
 
-                </div>
-                
-            </form>
-        </main>
-</body>
+        <button class="signup-btn" type="submit" value="submit">Sign Up</button>
+      </form>
+
+      <p>or</p>
+      <a href="/login/google" class="google-icon">
+        <button class="google-btn">
+          <img
+            src="/images/google.png"
+            alt="sign up with google"
+            class="google-img"
+          />Sign up with Google
+        </button>
+      </a>
+    </main>
+  </body>
 </html>
