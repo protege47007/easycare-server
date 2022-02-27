@@ -6,9 +6,10 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+}
+body{
   font-family: "Open Sans", sans-serif;
 }
-
 
 nav {
   position: relative;
@@ -95,25 +96,7 @@ button {
 button:hover {
   opacity: 1;
 }
-.google-btn {
-  border: 1px solid #767873;
-  box-sizing: border-box;
-  border-radius: 4px;
-  background-color: #fff;
-  color: #1a1c19;
-  padding: 1rem 4rem;
-  cursor: pointer;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-}
-.google-icon {
-  text-decoration: none;
-}
-.google-icon i {
-  position: absolute;
-  padding: 0.6rem 1rem;
-}
+
 .terms {
   display: flex;
   width: 100%;
@@ -124,30 +107,28 @@ button:hover {
   padding: .5rem;
 }
 
-i {
-  width: 100%;
-}
-.fa-google {
-  color: #4e81ee;
-}
 .agreement{
   width: 1.3rem;
   height: 1.3rem;
 }
 
-@media screen and (min-width: 800px) {
-  .google-btn {
-    padding: 1rem 7rem;
-  }
-  .google-icon i {
-    padding: 0.6rem 3rem;
-  }
-  .terms label {
-    /* margin-left: -8rem; */
-  }
-  .terms {
-    /* margin-left: -8rem; */
-  }
+
+.google-btn {
+  border: 1px solid #767873;
+  box-sizing: border-box;
+  border-radius: 4px;
+  background-color: #fff;
+  color: #1a1c19;
+  padding: 1rem 2rem;
+  cursor: pointer;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100% !important;
+  margin-top: 1%;
+}
+.google-icon {
+  text-decoration: none;
 }
 .google-img {
   width: 2rem;

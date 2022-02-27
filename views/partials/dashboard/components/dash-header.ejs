@@ -5,30 +5,30 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Dashboard</title>
-    <link rel="stylesheet" href="/styles/dash.css" />
+    <link rel="stylesheet" href="/styles/dashboard/basis.css" />
+    <link rel="stylesheet" href="/styles/dashboard/header.css">
+    <link rel="stylesheet" href="/styles/dashboard/sidenav.css">
+    <link rel="stylesheet" href="/styles/dashboard/table.css">
+    <link rel="stylesheet" href="/styles/dashboard/stats.css">
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
     />
+    <!-- scripts section -->
+    <script src=""></script>
   </head>
   <body>
     <header>
       <nav>
         <img src="/images/logo.svg" alt="logo" class="nav-img" />
-
-        <!-- sidenav goes here --><%- include ('./sidebar.ejs') -%>
-
-        <span id="icon" class="hamburger" onclick="openNav()">
+        <span id="icon" class="hamburger off" onclick="openNav()">
           <i class="fa fa-bars fa-2x"></i>
         </span>
         <div class="input-icon nav-form">
           <i class="fa fa-search"></i>
-          <input type="text" placeholder="Search for caregivers" />
+          <input type="text" placeholder="Search for caregivers"  class="search"/>
         </div>
-        <!-- notification bell and profile avatar goes here--><%- include ('./bell.ejs') -%>
+        <!-- notification bell and profile avatar goes here-->
+        <%- include ('./bell.ejs') -%>
       </nav>
-      <div class="input-icon nav-input">
-        <i class="fa fa-search"></i>
-        <input type="text" placeholder="Search for caregivers" />
-      </div>
     </header>

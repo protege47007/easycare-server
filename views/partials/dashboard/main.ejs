@@ -1,4 +1,7 @@
-<%- include ('./components/dash-head.ejs', {styles: "/styles/dash.css"}) -%>
+<%- include ('./components/dash-header.ejs', {styles: "/styles/dash.css"}) -%>
+<main>
+    <%- include ('./components/sidebar.ejs') -%>
 <%- include ('./components/stats.ejs') -%>
 <%- include ('./components/datatable.ejs') -%>
-<%- include ('../footer/footer.ejs', {src: "/scripts/dash.js"}) -%>
+</main>
+<%- include ('./components/footer.ejs') -%>

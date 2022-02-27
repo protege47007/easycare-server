@@ -5,18 +5,17 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Sign Up</title>
-    <link rel="stylesheet" href="/styles/sign.css" />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
-    />
+    <link rel="stylesheet" href="/styles/signup.css" />
+    <link rel="stylesheet" href="/styles/modal.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="/scripts/signup.js" defer></script>
   </head>
   <body>
     <header>
       <nav>
-        <img src="../images/logo.svg" alt="logo" class="nav-img" />
+        <a href="/"><img src="/images/logo.svg" alt="logo" class="nav-img" /></a>
         <div class="signin-container">
-          <a href="../index/signout.html"
+          <a href="/login"
             ><button class="signin-btn">Sign in</button></a
           >
         </div>
@@ -27,24 +26,25 @@
     </header>
 
     <main>
-      <form action="/signup" method="post">
+      <form id="signUp" >
         <div class="input-icon">
           <i class="fa fa-user"></i>
-          <input type="text" placeholder="Full Name" required />
+          <input type="text" placeholder="Full Name" name="fullname" required minlength="10" id="name"/>
         </div>
         <div class="input-icon">
           <i class="fa fa-envelope"></i>
-          <input type="text" placeholder="Email" required />
+          <input type="text" placeholder="Email" name="mail" required id="mail"/>
         </div>
         <div class="input-icon">
           <i class="fa fa-lock"></i>
-          <input type="password" placeholder="Password" required />
+          <input type="password" placeholder="Password" required id="password" minlength="6" name="password"/>
         </div>
 
         <div class="input-icon">
           <i class="fa fa-lock"></i>
-          <input type="password" placeholder="Confirm Password" required />
+          <input type="password" placeholder="Confirm Password" required id="confirm" minlength="6"/>
         </div>
+        <p class="error off" style="color: red;">password does not match</p>
         <div class="terms">
           <input
             type="checkbox"
@@ -60,7 +60,7 @@
           >
         </div>
 
-        <button class="signup-btn" type="submit" value="submit">Sign Up</button>
+        <button class="signup-btn" type="submit" value="submit"  id="btn">Sign Up</button>
       </form>
 
       <p>or</p>
@@ -73,6 +73,8 @@
           />Sign up with Google
         </button>
       </a>
+      <%- include ('./status.ejs', {image: "/images/cancel.png", id: "fail"}) -%>
+      <%- include ('./status.ejs', {image: "/images/Vector.png", id: "success"}) -%>
     </main>
   </body>
 </html>

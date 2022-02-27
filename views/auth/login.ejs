@@ -5,14 +5,15 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign In</title>
-    <link rel="stylesheet" href="/styles/signout.css">
+    <link rel="stylesheet" href="/styles/login.css">
+    <link rel="stylesheet" href="/styles/modal.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">  
-    
+    <script src="/scripts/login.js" defer></script>
 </head>
 <body>
     <header>
         <nav>
-            <img src="../images/logo.svg" alt="logo" class="nav-img"> 
+            <a href="/"><img src="/images/logo.svg" alt="logo" class="nav-img"></a> 
             <div class="signin-container">
             <a href="/signup"><button type="submit" class="signup-btn">Sign up</button></a>
         </div>
@@ -46,9 +47,10 @@
                 <button type="submit" value="submit" class="signin-btn">Sign In</button>
                 
             </form>
-
+            <%- include ('./status.ejs', {image: "/images/cancel.png", id: "fail"}) -%>
+            <%- include ('./status.ejs', {image: "/images/Vector.png", id: "success"}) -%>
         </main>
         <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-        <script src="/scripts/signout.js"></script>
+        <script src="/scripts/login.js"></script>
 </body>
 </html>

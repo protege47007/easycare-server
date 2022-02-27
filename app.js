@@ -4,17 +4,18 @@ require("dotenv").config();
 const _ = require("lodash");
 const mongoose = require("mongoose");
 const express = require("express");
-const encrypt = require("mongoose-encryption");//uninstall this
-const bcrypt = require("bcrypt");//uninstall this
 const cloudinary = require("cloudinary").v2;
 const mailer = require("nodemailer");
 const session = require("express-session");
+const MongoDBStore = require('connect-mongodb-session')(session);
 const passport = require("passport");
 const passportLocalMongoose = require("passport-local-mongoose");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const findOrCreate = require("mongoose-findorcreate");
 const multer = require("multer");
 const ejs = require("ejs");
+const { randomUUID } = require('crypto');
+
 
 cloudinary.config({
   cloud_name: "easycare-ng",
@@ -27,17 +28,31 @@ cloudinary.config({
 
 //calling express
 const app = express();
-app.set('view engine', 'ejs')
+const store = new MongoDBStore({
+  uri: 'mongodb://localhost:27017/easycareDb',
+  collection: 'mySessions'
+});
+const Session = {
+  genid: (req) => {return randomUUID()},
+  secret: process.env.KEY,
+  resave: false,
+  saveUninitialized: true,
+  cookie: { maxAge: 1000*60*60*24},
+  store: store,
+}
+app.set('view engine', 'ejs');
+if (app.get('env') === 'production') {
+    app.set('trust proxy', 1);
+    session.cookie.secure = true;
+}
+// Catch errors
+store.on('error', function(error) { console.log(error); });
+
+//express use middle wares
 app.use(express.static('public'));
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ limit: "10mb", extended: true }));
-app.use(
-  session({
-    secret: process.env.KEY,
-    resave: false,
-    saveUninitialized: false,
-  })
-);
+app.use(session(Session));
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -45,30 +60,65 @@ app.use(passport.session());
 //mongoDB instance
 // `mongodb+srv://protege47007:${process.env.PASS}@cluster0.5nisq.mongodb.net/easycareDb`
 // 
-mongoose.connect('mongodb://localhost:27017/easycareDb', {
+mongoose.connect(app.get('env') === 'production' ? `mongodb+srv://protege47007:${process.env.PASS}@cluster0.5nisq.mongodb.net/easycareDb` : 'mongodb://localhost:27017/easycareDb', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
 
 //schemas declaration
-const clientSchema = new mongoose.Schema({
-  fullname: String,
-  email: String,
-});
-
-const careGiverSchema = new mongoose.Schema({
-  fullname: String,
-  email: String,
-});
 
 const userSchema = new mongoose.Schema({
   username: String,
   password: String,
 });
 
-const adminSchema = new mongoose.Schema({
-  username: String,
+const clientSchema = new mongoose.Schema({
   fullname: String,
+  email: String,
+  dateJoined: String,
+  phoneNumber: String,
+  profilePicture: String,
+  gender: String,
+  city: String,
+  state: String,
+  address: String
+});
+
+
+const organizationSchema = new mongoose.Schema({
+  organizationName: String,
+  email: String,
+  dateJoined: String,
+  phoneNumber: String,
+  city: String,
+  state: String,
+  address: String,
+});
+
+const careGiverSchema = new mongoose.Schema({
+  fullname: String,
+  email: String,
+  dateJoined: String,
+  phoneNumber: String,
+  gender: String,
+  rating: Number,
+  city: String,
+  state: String,
+  address: String,
+  organization: organizationSchema,
+});
+
+
+
+const adminSchema = new mongoose.Schema({
+  fullname: String,
+  email: String,
+  dateJoined: String,
+  phoneNumber: String,
+  gender: String,
+  city: String,
+  state: String,
+  address: String,
 });
 
 // users collection encryption
@@ -78,6 +128,7 @@ userSchema.plugin(findOrCreate);
 const Client = mongoose.model("Client", clientSchema);
 const CGiver = mongoose.model("CareGiver", careGiverSchema);
 const User = mongoose.model("User", userSchema);
+const Org = mongoose.model("Organizations", organizationSchema);
 
 passport.serializeUser(function (user, done) {
   done(null, user.id);
@@ -103,11 +154,14 @@ passport.use(
     }
   )
 );
+const noAuth = require('./routes/static-pages');
 
+app.use(noAuth);
 // home page route
-app.get('/', (req, res) => {
-  res.render('main/home')
-})
+// app.get('/', (req, res) => {
+//     res.render('main/home');
+// })
+
 
 
 
@@ -119,24 +173,20 @@ app
     res.render('auth/login');
   })
   .post((req, res) => {
-    const user = {
-      username: req.body.mail,
-      password: req.body.password,
-    };
-
+    const {mail, password} = req.body;
     User.findOne({ email: req.body.mail }, function (err, foundUser) {
       if (err) {
         console.log("user collection error:", err);
       } else {
         if (foundUser) {
-          req.login(user, (err) => {
+          req.login(foundUser, (err) => {
             if (err) {
               console.error(err, "login error");
+              res.redirect('/login');
             } else {
-              passport.authenticate("local", {
-                failureRedirect: "/login",
-              })(req, res, () => {
-                res.redirect("/profile");
+              passport.authenticate("local", {failureRedirect: "/login"})(req, res, () => {
+                req.session.mail = mail;
+                res.redirect("/dashboard");
               });
             }
           });
@@ -156,7 +206,7 @@ app.get(
   "/auth/google/",
   passport.authenticate("google", { failureRedirect: "/login" }),
   (req, res) => {
-    res.redirect("/profile");
+    res.redirect("/dashboard");
   }
 );
 
@@ -168,6 +218,7 @@ app
     res.render('auth/signup');
   })
   .post((req, res) => {
+    console.log(req.body);
     User.findOne(
       { email: req.body.mail.toLowerCase() },
       function (err, foundUser) {
@@ -175,7 +226,7 @@ app
           console.log("user collection error:", err);
         } else {
           if (foundUser) {
-            res.redirect("/login/already"); //already a member
+            res.json({status: "failed", message: "This email is already registered with us!"}); //already a member
           } else {
             User.register(
               { username: req.body.mail.toLowerCase() },
@@ -183,17 +234,19 @@ app
               (err, user) => {
                 if (err) {
                   console.error(err);
-                  res.redirect("/signup");
+                  res.json({status: "failed", message: "something went wrong on our end. \n please try again."});
                 } else {
                   passport.authenticate("local")(req, res, () => {
                     //new clients db collection with their fullname, mail, and other details
+                    req.session.mail = req.body.mail;
                     let data = {
                       fullname: req.body.fullname,
                       email: req.body.mail,
+                      dateJoined: new Date().toString(),
                     };
                     let output = saveToDb(data, Client);
                     if (!output) {
-                      res.redirect("/profile");
+                      res.redirect("/dashboard");
                     } else {
                       res.redirect("/signup");
                     }
@@ -268,14 +321,69 @@ app
     });
   });
 
-app.get("/profile", (req, res) => {
+
+
+app.route("/dashboard")
+.get( (req, res) => {
   if (req.isAuthenticated()) {
-    res.write("welcome to easy care!", "utf8");
-    res.end();
+    Client.findOne({email: req.session.mail}, (err, foundUser) => {
+      if(err){
+        console.error(err, 'error fetching data');
+        res.redirect('/login');
+      }
+      else{
+        console.log(foundUser);
+        
+        res.render('main/dashboard', {
+          user: foundUser,
+        });
+      }
+    });
   } else {
     res.redirect("/login");
   }
 });
+
+app.get('/dashboard/:something', (req, res) => {
+  if (req.isAuthenticated()) {
+
+    //routing between each dashboard component
+    switch (req.params.something) {
+      case "profile":
+        Client.findOne({email: req.session.mail}, (err, foundClient) => {
+          if (err) {
+            console.error(err);
+            res.json({status: "failed", message: "error fetching data"});
+          } else {
+            res.render('main/client/profile', {
+              user: foundClient,
+            });
+          }
+        });
+        break;
+  
+      case "caregiver":
+        
+        break;
+  
+      case "inbox":
+        
+        break;
+  
+      default:
+        res.redirect('/dashboard');
+        break;
+    }
+    //end of switch statement
+  }
+  else{
+    res.redirect('/login');
+  }
+  
+});
+
+
+
 
 
 
@@ -291,9 +399,9 @@ const Contact = mongoose.model("contact", contactSchema);
 
 //contact form handler
 app.route("/contact")
-  .get((req, res) => {
-    res.render('main/contact');
-  })
+  // .get((req, res) => {
+  //   res.render('main/contact');
+  // })
 .post( (req, res) => {
   let data = {
     fullname: req.body.fullname,
@@ -374,6 +482,7 @@ const upload = multer({ storage });
 const path = require('path');
 
 const DatauriParser = require('datauri/parser');
+const { error } = require("console");
 const parser = new DatauriParser();
 
 const dataUri = (req) =>{
@@ -441,17 +550,44 @@ function saveToDb(obj, collectionName) {
   });
 }
 
+
+//password recovery route
+app.route('/forgotten')
+.get((req, res) => {
+  res.render('auth/forget');
+})
+.post( (req, res) => {
+  User.findOne({email: req.body.mail}, (error, foundUser) =>{
+    if (error) {
+      res.json({status: 'failed', message: 'error fetching data. try again'});
+    }
+    else{
+      if (foundUser) {
+        console.log(foundUser);
+        //reset password, generate otp and replace with password and send to mail
+        res.json({status: 'success', message: 'Check your mail for your otp'});
+      } else {
+        res.json({
+          status: 'failed',
+          message: 'Email is not registered with us'
+        })
+      }
+    }
+  })
+})
+
+
 const transporter = mailer.createTransport({
   service: "gmail",
   auth: {
-    user: "youremail@gmail.com",
-    pass: "yourpassword",
+    user: process.env.MY_MAIL,
+    pass: process.env.MAIL_KEY,
   },
 });
 
 let mailOptions = {
   from: "stalker@stalker.com",
-  to: "myFriend@gmail.com", // multiple reciepients 'a@mail.com, b@gamil.com '
+  to: "akdadewumi@gmail.com", // multiple reciepients 'a@mail.com, b@gamil.com '
   subject: "Sending Email using Node.js",
   text: "this was some what easy!.. ;)", // or html: '<h1>welcome</h1><p>that was easy!</p>'
 };
@@ -465,7 +601,10 @@ function sendMail(auth, options) {
     }
   });
 }
-
+// sendMail(transporter, mailOptions);
+app.use(function(req, res){
+  res.status(404).send('404_error_template');
+});
 //Server initialization
 app.listen(process.env.PORT || 3030, () => {
   console.log("Server is Live and running!");

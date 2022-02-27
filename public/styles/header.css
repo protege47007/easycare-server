@@ -1,0 +1,129 @@
+nav,
+.nav-list {
+  display: flex;
+}
+nav {
+  position: relative;
+  align-items: center;
+  padding: 0 2.5rem;
+  -webkit-transition: all 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
+}
+.hamburger {
+  margin-top: 0.4rem;
+  display: none;
+  cursor: pointer;
+}
+
+.nav-list {
+    position: absolute;
+    right: 2.5rem;
+  list-style: none;
+
+  align-items: center;
+}
+
+.nav-link,
+.nav-log {
+  text-decoration: none;
+  color: #3a3a3a;
+  text-transform: capitalize;
+  margin-left: 1em;
+  font-size: 1.2rem;
+  font-weight: 600;
+  font-family: "Open Sans", sans-serif;
+}
+.active {
+  color: #004492;
+  border-bottom: 3px solid #004492;
+  font-weight: 600;
+}
+.nav-link:hover {
+  color: #004492;
+  text-shadow: 1px 1px 1px rgba(128, 128, 128, 0.466);
+}
+
+.nav-btn {
+  background-color: #49c255;
+  color: #fff;
+  padding: 0.6rem 1.2rem;
+  border-radius: 5px;
+  text-transform: capitalize;
+  margin-left: 3rem;
+  font-weight: 600;
+}
+.nav-btn:hover {
+  background-color: #fff;
+  color: #002e68;
+  border: 1px solid #002e68;
+}
+
+@media screen and (max-width: 890px) {
+  .nav-img {
+    width: 20%;
+  }
+  .nav-list {
+    display: block;
+    text-align: center;
+    width: 100%;
+    background-color: #fff;
+    top: 80px;
+    gap: 0;
+    left: -100%;
+    position: fixed;
+    transition: 0.3s;
+    padding: 2rem;
+  }
+  .nav-link,
+  .nav-log {
+    margin: 3rem 0;
+    font-size: 20px;
+  }
+  .nav-list.active {
+    left: 0;
+  }
+  .nav-link:hover {
+    background-color: #4fdbd2;
+    font-weight: bold;
+  }
+  .nav-btn {
+    display: none;
+  }
+
+  .hamburger {
+    display: block;
+  }
+  .hamburger.active .menu:nth-child(2) {
+    opacity: 0;
+  }
+  .hamburger.active .menu:nth-child(1) {
+    transform: translateY(8px) rotate(45deg);
+  }
+  .hamburger.active .menu:nth-child(3) {
+    transform: translateY(-8px) rotate(-45deg);
+  }
+}
+
+
+/* width */
+::-webkit-scrollbar {
+  width: 15px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px #001a41;
+  border-radius: 10px;
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #49c255; 
+  border-radius: 10px;
+  border-color: #002e68;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #4fdbd2;
+}

@@ -16,53 +16,6 @@ img {
   max-width: 100%;
 }
 
-nav {
-  display: flex;
-  justify-content: space-between;
-  margin: 0;
-  padding: 0 2.5rem;
-}
-.menu {
-  width: 35px;
-  height: 5px;
-  background-color: black;
-  margin: 6px 0;
-  -webkit-transition: all 0.3s ease-in-out;
-  transition: 0.3s ease-in-out;
-}
-.hamburger {
-  margin-top: 0.4rem;
-  display: none;
-  cursor: pointer;
-}
-
-.nav-list {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  display: block;
-  align-items: center;
-}
-
-.nav-link,
-.nav-log {
-  text-decoration: none;
-  color: #3a3a3a;
-  text-transform: capitalize;
-  margin-left: 1em;
-  font-size: 1.2rem;
-  font-weight: 600;
-  font-family: "Open Sans", sans-serif;
-}
-.active {
-  color: #004492;
-  border-bottom: 3px solid #004492;
-  font-weight: 600;
-}
-.nav-link:hover {
-  color: #004492;
-  text-shadow: 1px 1px 1px rgba(128, 128, 128, 0.466);
-}
 
 .hero {
   background: linear-gradient(rgba(0, 68, 146, 0.44), rgba(0, 68, 146, 0.44)),
@@ -388,20 +341,6 @@ footer {
 .google-play {
   width: 80%;
 }
-.nav-btn {
-  background-color: #49c255;
-  color: #fff;
-  padding: .6rem 1.2rem;
-  border-radius: 5px;
-  text-transform: capitalize;
-  margin-left: 3rem;
-  font-weight: 600;
-}
-.nav-btn:hover{
-    background-color: #fff;
-    color: #002e68;
-    border: 1px solid #002e68;
-}
 @media screen and (min-width: 560px) {
   .footer {
     display: grid;
@@ -416,12 +355,7 @@ footer {
 }
 
 @media screen and (min-width: 800px) {
-  .nav-img {
-    width: 5%;
-  }
-  .nav-log {
-    display: none;
-  }
+  
   h1 {
     font-size: 3.75rem;
     line-height: 4.3rem;
@@ -434,13 +368,6 @@ footer {
   }
   .services-p {
     width: 30%;
-  }
-  .nav-list {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-    display: flex;
-    align-items: center;
   }
 
   .row {
@@ -509,49 +436,7 @@ footer {
   }
 }
 @media screen and (max-width: 890px) {
-  .nav-img {
-    width: 20%;
-  }
-  .nav-list {
-    display: block;
-    text-align: center;
-    width: 100%;
-    background-color: #fff;
-    top: 80px;
-    gap: 0;
-    left: -100%;
-    position: fixed;
-    transition: 0.3s;
-    padding: 2rem;
-  }
-  .nav-link,
-  .nav-log {
-    margin: 3rem 0;
-    font-size: 20px;
-  }
-  .nav-list.active {
-    left: 0;
-  }
-  .nav-link:hover{
-    background-color: #4fdbd2;
-    font-weight: bold;
-  }
-  .nav-btn {
-    display: none;
-  }
-
-  .hamburger {
-    display: block;
-  }
-  .hamburger.active .menu:nth-child(2) {
-    opacity: 0;
-  }
-  .hamburger.active .menu:nth-child(1) {
-    transform: translateY(8px) rotate(45deg);
-  }
-  .hamburger.active .menu:nth-child(3) {
-    transform: translateY(-8px) rotate(-45deg);
-  }
+  
   .footer-logo {
     margin-top: 1rem;
   }

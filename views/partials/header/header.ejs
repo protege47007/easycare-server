@@ -4,9 +4,14 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" 
+      type="image/png" 
+      href="/images/logo.svg">
     <title>Home</title>
     <!-- local stylesheet -->
     <link rel="stylesheet" href="<%= styles %> " />
+    <link rel="stylesheet" href="/styles/header.css">
+    <link rel="stylesheet" href="/styles/footer-mobile.css">
     <!-- external stylesheet -->
     <link
       rel="stylesheet"
@@ -14,12 +19,11 @@
     />
     <!-- scripts -->
     <script src="/scripts/index.js" defer></script>
-    <script src="<%= submit %> "></script>
   </head>
   <body>
     <header>
       <nav>
-        <img src="images/logo.svg" alt="logo" class="nav-img" />
+        <a href="/"><img src="/images/logo.svg" alt="logo" class="nav-img" /></a>
 
         <ul class="nav-list" id="menu">
           <li><a href="/" class="nav-link">Home</a></li>
