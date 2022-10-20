@@ -622,3 +622,50 @@ app.use( (err, req, res, next) => {
 app.listen(process.env.PORT || 3030, () => {
   console.log("Server is Live and running! on port: ", process.env.PORT || 3030);
 });
+
+//NEW SERVER
+
+const createError = require("http-errors")
+const express = require("express")
+const logger = require("morgan")
+const cors = require("cors")
+const mongoose = require("mongoose")
+
+module.exports = (config) => {
+  const app = express();
+  // mongoose.plugin(require('./utils/log_plugin'))
+  const routes = require("./routes")
+
+
+  app.use(logger("dev"))
+  app.use(express.json())
+  app.use(express.urlencoded({ extended: true }))
+  app.set("views", path.join(__dirname, "./views"))
+  app.use(express.static(path.join(__dirname, "./public")))
+  app.use(cors())
+  app.use((req, res, next) => {
+    res.setHeader("Access-Control-Allow-Origin", "*")
+    res.setHeader("Access-Control-Allow-Headers", "Origin,X-Requested-with,Content-Type,Accept,Authorization");
+    next()
+  })
+  
+
+  
+  //routes
+  app.use("/", routes())
+
+  // catch 404 and forward to error handler
+  app.use(function (req, res, next) {
+    
+    next(createError(404, "File Not Found!"));
+  })
+
+  // error handler
+  app.use(function (err, req, res, next) {
+    console.log("error handler: ", err)
+    res.status(500).json({body: err.body, message: err.message})
+  })
+
+  return app
+}
+
