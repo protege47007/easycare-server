@@ -1,4 +1,5 @@
 const router = require("express").Router()
+const forgotten = require("../controller/auth/forgotten");
 const contact = require("../controller/static/contact")
 
 module.exports = (params) => {
@@ -25,10 +26,12 @@ module.exports = (params) => {
         res.render('main/services');
     })
 
-    router.get("/forgot-password", (req, res) => {
+    router.get("/forgotten", (req, res) => {
         res.render('auth/forget');
     })
-    
+
+    router.post("/forgotten", forgotten)
+
     router.use("/", auth)
     
     //Authentication is required henceforth
