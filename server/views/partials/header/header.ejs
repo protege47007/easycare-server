@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" 
+      type="image/png" 
+      href="/images/logo.svg">
+    <title>Home</title>
+    <!-- local stylesheet -->
+    <link rel="stylesheet" href="<%= styles %> " />
+    <link rel="stylesheet" href="/styles/header.css">
+    <link rel="stylesheet" href="/styles/footer-mobile.css">
+    <!-- external stylesheet -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <!-- scripts -->
+    <script src="/scripts/index.js" defer></script>
+  </head>
+  <body>
+    <header>
+      <nav>
+        <a href="/"><img src="/images/logo.svg" alt="logo" class="nav-img" /></a>
+
+        <ul class="nav-list" id="menu">
+          <li><a href="/" class="nav-link">Home</a></li>
+          <li><a href="/about" class="nav-link">about us</a></li>
+          <li>
+            <a href="/services" class="nav-link">our services</a>
+          </li>
+          <li>
+            <a href="/news" class="nav-link"
+              >news articles</a
+            >
+          </li>
+          <li>
+            <a href="/contact" class="nav-link">contact us</a>
+          </li>
+          <li>
+            <a href="/login" class="nav-link nav-btn">Sign in</a>
+          </li>
+        </ul>
+      </nav>
+    </header>

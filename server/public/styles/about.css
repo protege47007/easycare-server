@@ -1,0 +1,335 @@
+@import url('https://fonts.googleapis.com/css2?family=Lora:wght@400;500;600&family=Open+Sans:wght@400;600&display=swap');
+
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+body{
+    margin: 0 auto;
+}
+
+
+img{
+    max-width: 100%;
+
+}
+
+h1{
+    line-height: 2.6rem;
+    font-size: 2.5rem;
+    font-family: 'Lora', serif;
+    font-weight: 600;
+}
+p{
+    line-height: 1.7rem;
+    font-size: 1.2rem;
+    font-family: 'Open Sans', sans-serif;
+}
+a{
+    text-decoration: none;
+    font-family: 'Open Sans', sans-serif;
+}
+
+
+.hero{
+    background-color:#F6F9FD;
+    text-align: center;
+    margin: auto;
+    padding: 6rem 2rem;
+    
+}
+.mission{
+    text-align: center;
+    margin: auto;
+    padding: 2rem;
+}
+.mission img{
+    width: 100%;
+    object-fit: cover;
+}
+.mission--female{
+    margin-top: 2rem;
+}
+.mission-hands{
+    margin-top: 2rem;
+}
+.badges1{
+    background-color: #24BEB6;
+    box-shadow: 5px 5px 19px rgba(0, 0, 0, 0.25);
+    margin: 2rem 2rem 6rem 2rem;
+    padding: 4rem 1.5rem 2rem 1.5rem;
+    color: #fff;
+    width: 100%;
+}
+.badges2{
+    background-color: #67DF6E;
+    box-shadow: 5px 5px 19px rgba(0, 0, 0, 0.25);
+    margin: 2rem 2rem 6rem 2rem;
+    padding: 4rem 1.5rem 2rem 1.5rem;
+    color: #fff;
+    width: 100%;
+}
+.badges3{
+    background-color: #5E90E7;
+    box-shadow: 5px 5px 19px rgba(0, 0, 0, 0.25);
+    margin: 2rem 2rem 6rem 2rem;
+    padding: 4rem 1.5rem 2rem 1.5rem;
+    color: #fff;
+    width: 100%;
+}
+.team-members{
+    justify-content: center;
+    padding: 4rem 0;
+}
+.team, .team-members h1 h3 p{
+    text-align: center;
+}
+
+.team-text, .mission h1, .hero h1{
+    color: #002E68;
+}
+.values h1{
+    color: #002E68;
+    text-align:center;
+}
+.values{
+    padding: 2rem;
+    justify-content: space-between;
+}
+
+.connect-text{
+    background-color: #3BB54A;
+    color: #fff;
+    padding: 4rem;
+}
+.connect-btn{
+    background-color: #fff;
+    color: #454843;
+    padding: 1rem 1.5rem;
+    text-transform: uppercase;
+    font-size: .8rem;
+    font-weight: 500;
+}
+.connect-head{
+    font-size: 1.8rem;
+    font-weight: 700;
+
+}
+.subscribe{
+    margin: auto;
+    text-align: center;
+    padding: 2rem;
+}
+.subscribe p{
+    font-size: 1.5rem;
+}
+button:hover{
+    color:rgb(22, 138, 153);    
+}
+
+button{
+    background-color: #001A41;
+    border-radius: 4px;
+    padding: 1.2rem 4rem;
+    color: #fff;
+    text-transform: uppercase;
+    font-size: 1.1rem;
+}
+
+input{
+    padding: 1.2rem 5rem;
+    font-size: 1.2rem;
+    border: 1.5px solid #5D5F5B;
+box-sizing: border-box;
+border-radius: 4px;
+color: #5D5F5B;
+margin: 1rem 0;
+
+}
+.input-icon i {
+    position: absolute;
+}
+  
+.input-icon {
+    width: 100%;
+    margin-bottom: 10px;
+}
+  
+.icon {
+    padding: 8px;
+    color: #5D5F5B;
+    /* min-width: 50px;    */
+}
+.input-field {
+    width: 100%;
+    padding: 10px 0 10px 60px;
+}
+.span{
+    border-bottom: 4px solid #002E68;
+}
+.btn{
+    padding: 4rem 0;
+}
+footer{
+    background-color: #001A41;
+    color: #fff;
+}
+.footer{
+    padding: 5rem 5rem 0 5rem;
+}
+.footer-items{
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    line-height: 1.4rem;
+}
+.footer-link{
+    color: #fff;
+    text-transform: capitalize;
+    font-weight: 400;
+    font-size: 0.9rem;
+}
+.footer-link:hover{
+    color: rgb(22, 138, 153);
+    font-weight: bold;
+}
+.footer-img-text{
+    font-size: 0.75rem;
+    margin-top: 4rem;
+    border-top: 1px solid white;
+    bottom: 0;
+    text-align: right;
+    padding: 1rem;
+}
+.footer-img,
+.footer-list{
+    margin-top: 2rem;
+}
+.footer-logo{
+    padding-left: 0.5rem;
+}
+
+.fa {
+    padding: 16px;
+    font-size: 1.2rem;
+    width: 30px;
+    text-align: center;
+    text-decoration: none;
+    margin: 5px 5px;
+  }
+
+   
+  .fa-facebook, .fa-instagram, .fa-twitter, .fa-linkedin, .fa-apple{
+    color: white;
+  }
+  .fa-facebook:hover, .fa-instagram:hover, .fa-twitter:hover, .fa-linkedin:hover{
+      color: rgb(22, 138, 153);
+  }
+  .apple{
+      width: 80%;
+      padding: 0.5rem;
+  }
+  .google-play{
+       width: 80%; 
+  }
+  
+@media screen and (min-width:600px){
+    .row{
+        display:grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    }
+    .hamburger{
+        margin: 1rem;
+    }
+}
+ 
+@media screen and (min-width:800px) {
+    
+    #icon{
+        display: hidden;
+    }
+    .hero{
+        padding: 10rem 12rem;
+    }
+    .row{
+        display: flex;
+    }
+    
+    .team{
+        padding: 4rem 5rem;
+    }
+    .values{
+        padding: 2rem 5rem;
+    }
+    .mission-statement{
+        width: 100%;
+    }
+    .mission-statement p{
+        width: 70%;
+    }
+    .mission-female{
+        width: 70%;
+    }
+    .mission-hands{
+        width: 50%
+    }
+  
+    .mission-female + .mission-hands{
+        margin-left: 3rem
+    }
+    .team-member-img{
+        margin-left: 5rem;
+    }
+    .subscribe{
+        margin-left: 6rem;
+    }
+    .mission{
+        padding: 0 5rem;
+    }
+    .hero h1{
+        font-size: 3.2rem;
+    }
+    .connect-head{
+        font-size: 2.2rem;
+    }
+    .footer-list{
+        width: 100%;
+    }
+    .footer-img{
+       right: 0;
+       width: 100%;
+    }
+    .footer-items li{
+        padding-bottom: 2rem;
+    }
+    .apple{
+        width: 40%;
+        
+    }
+    .google-play{
+        width: 45%;
+    }
+    .connect-btn{
+        font-size: 1.3rem;
+    }
+}
+    @media screen and (min-width:1200px) {
+        .connect-text{
+            padding: 4rem 4rem 4rem 15rem;
+        }
+        .subscribe{
+            margin-left: 6rem;
+            text-align: left;
+        }
+        .connect-btn{
+            background-color: #fff;
+            color: #454843;
+            text-transform: uppercase;
+            font-weight: 500;
+        }
+}
+    @media screen and (max-width:890px) {
+        .footer-logo{
+            margin-top: 1rem;
+        }
+    }

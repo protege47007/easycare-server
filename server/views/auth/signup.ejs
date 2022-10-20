@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign Up</title>
+    <link rel="stylesheet" href="/styles/signup.css" />
+    <link rel="stylesheet" href="/styles/modal.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="/scripts/signup.js" defer></script>
+  </head>
+  <body>
+    <header>
+      <nav>
+        <a href="/"><img src="/images/logo.svg" alt="logo" class="nav-img" /></a>
+        <div class="signin-container">
+          <a href="/login"
+            ><button class="signin-btn">Sign in</button></a
+          >
+        </div>
+      </nav>
+      <div>
+        <h1>Let's get you connected</h1>
+      </div>
+    </header>
+
+    <main>
+      <form id="signUp" >
+        <div class="input-icon">
+          <i class="fa fa-user"></i>
+          <input type="text" placeholder="Full Name" name="fullname" required minlength="10" id="name"/>
+        </div>
+        <div class="input-icon">
+          <i class="fa fa-envelope"></i>
+          <input type="text" placeholder="Email" name="mail" required id="mail"/>
+        </div>
+        <div class="input-icon">
+          <i class="fa fa-lock"></i>
+          <input type="password" placeholder="Password" required id="password" minlength="6" name="password"/>
+        </div>
+
+        <div class="input-icon">
+          <i class="fa fa-lock"></i>
+          <input type="password" placeholder="Confirm Password" required id="confirm" minlength="6"/>
+        </div>
+        <p class="error off" style="color: red;">password does not match</p>
+        <div class="terms">
+          <input
+            type="checkbox"
+            id="terms"
+            name="terms"
+            class="agreement"
+            value="checked"
+            required
+          />
+          <label for="terms and condition">
+            I agree with EasyCare's <a href="/terms">Terms</a> and
+            <a href="/privacy">Privacy Policy</a></label
+          >
+        </div>
+
+        <button class="signup-btn" type="submit" value="submit"  id="btn">Sign Up</button>
+      </form>
+
+      <p>or</p>
+      <a href="/login/google" class="google-icon">
+        <button class="google-btn">
+          <img
+            src="/images/google.png"
+            alt="sign up with google"
+            class="google-img"
+          />Sign up with Google
+        </button>
+      </a>
+      <%- include ('./status.ejs', {image: "/images/cancel.png", id: "fail"}) -%>
+      <%- include ('./status.ejs', {image: "/images/Vector.png", id: "success"}) -%>
+    </main>
+  </body>
+</html>

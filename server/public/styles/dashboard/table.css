@@ -1,0 +1,74 @@
+.other-section {
+  width: 95%;
+  padding: 0 0 0 4rem;
+}
+.other-section > h3 {
+  font-size: 1.5rem;
+}
+.caregivers {
+  border: 1px solid #dfe0eb;
+  box-sizing: border-box;
+  border-radius: 8px;
+}
+.caregivers {
+  width: 100%;
+}
+.star {
+  color: goldenrod;
+}
+
+.avatar {
+  display: flex;
+  margin-top: 1rem;
+}
+tr a {
+  font-weight: 400;
+  font-size: 0.4rem;
+  color: #ffffff;
+  text-decoration: none;
+  background: #28a63d;
+  border-radius: 8px;
+  padding: 0.3rem 0.1rem;
+}
+tr a:hover {
+  color: #002e68;
+}
+
+th {
+  color: #002e68;
+  font-weight: 600;
+  font-size: 1rem;
+}
+td {
+  font-size: 0.8rem;
+}
+.avatar-text {
+  color: #002e68;
+}
+td,
+th {
+  border-bottom: 1px solid #dfe0eb;
+}
+
+@media screen and (min-width: 800px) {
+  .input-icon {
+    margin-left: 6rem;
+  }
+  td {
+    font-size: 1rem;
+  }
+  tr a {
+    padding: 0.5rem 0.75rem;
+    margin-right: 2rem;
+    line-height: 14px;
+    letter-spacing: 0.2px;
+    font-size: 14px;
+  }
+  th {
+    text-align: left;
+  }
+  table {
+    width: 100%;
+    overflow-x: auto;
+  }
+}
